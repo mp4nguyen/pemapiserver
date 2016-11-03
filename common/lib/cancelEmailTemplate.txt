@@ -1,0 +1,7 @@
+Your booking request regarding your Pre-Employment/ Periodic Medical Assessment at REDiMED at Date / Time:<b> {{appointmentTime}} </b> in Location: <b>REDiMED {{siteName}} </b> has been cancelled.
+<br><br>
+<b>Please call REDiMED for any enquiries or to reschedule your appointment if required.</b><br><br><br>
+<img src='https://medicalbookings.redimed.com.au:8181/assets/global/img/Logo REDIMED 128px.png'/> <br>
+Address: 1 Frederick street, Belmont, 6104, WA, Australia <br>
+Phone:   (08) 9300 3835<br>
+Webite:  www.redimed.com.au

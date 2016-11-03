@@ -1,0 +1,8 @@
+Request for: {{certtype}} State: {{state}} <br>
+Name:{{patientname}} <br>
+DOB:{{dob}} <br>
+FaceTime email:{{facetime}} <br>
+Skype name:{{skype}} <br>
+Time:{{time}} <br>
+Description of Injury:{{injury}} <br>
+Body part:{{bodypart}} 

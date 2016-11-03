@@ -1,0 +1,37 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "sakila": {
+    "host": "localhost",
+    "port": 3306,
+    "database": "sakila2",
+    "password": "root",
+    "name": "sakila",
+    "connector": "mysql",
+    "user": "root"
+  },
+    "mongodb": {
+        "host": "localhost",
+        "port": 27017,
+        "database": "test",
+        "connector": "mongodb"
+    },
+  "Email": {
+    "name": "Email",
+    "defaultForType": "mail",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "mail.redimed.com.au",
+        "port": 25,
+        "auth": {
+          "user": "programmer2",
+          "pass": "Hello8080"
+        }
+      }
+    ]
+  }
+}

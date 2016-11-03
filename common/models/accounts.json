@@ -1,0 +1,801 @@
+{
+    "name": "accounts",
+    "base": "User",
+    "idInjection": false,
+    "options": {
+        "validateUpsert": true
+    },
+    "mysql": {
+        "schema": "sakila",
+        "table": "accounts"
+    },
+    "properties": {
+        "id": {
+            "type": "Number",
+            "id": true,
+            "required": true,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "N"
+            },
+            "_selectable": false
+        },
+        "password": {
+            "type": "String",
+            "required": true,
+            "length": 500,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "password",
+                "dataType": "varchar",
+                "dataLength": 500,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "companyId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "company_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "userType": {
+            "type": "String",
+            "required": false,
+            "length": 20,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "user_type",
+                "dataType": "varchar",
+                "dataLength": 20,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "resultEmail": {
+            "type": "String",
+            "required": false,
+            "length": 1000,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "result_email",
+                "dataType": "varchar",
+                "dataLength": 1000,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "invoiceemail": {
+            "type": "String",
+            "required": false,
+            "length": 1000,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "invoiceemail",
+                "dataType": "varchar",
+                "dataLength": 1000,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "poNumber": {
+            "type": "String",
+            "required": false,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "PO_number",
+                "dataType": "varchar",
+                "dataLength": 50,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "bookingPerson": {
+            "type": "String",
+            "required": false,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "Booking_Person",
+                "dataType": "varchar",
+                "dataLength": 50,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "contactNumber": {
+            "type": "String",
+            "required": false,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "Contact_number",
+                "dataType": "varchar",
+                "dataLength": 50,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isproject": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isProject",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "iscalendar": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isCalendar",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "istelehealthBooking": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isTelehealthBooking",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isall": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isAll",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isenable": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isEnable",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "contactEmail": {
+            "type": "String",
+            "required": false,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "Contact_email",
+                "dataType": "varchar",
+                "dataLength": 50,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "reportToEmail": {
+            "type": "String",
+            "required": false,
+            "length": 50,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "Report_To_email",
+                "dataType": "varchar",
+                "dataLength": 50,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "ismakebooking": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isMakeBooking",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isbooking": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isBooking",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "ispackage": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isPackage",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isposition": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isPosition",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "issetting": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isSetting",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "createdBy": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "Created_by",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "creationDate": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "Creation_date",
+                "dataType": "datetime",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "lastUpdatedBy": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "Last_updated_by",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "lastUpdateDate": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "Last_update_date",
+                "dataType": "datetime",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isdownloadresult": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isDownloadResult",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isallcompanydata": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isAllCompanyData",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isadmin": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isAdmin",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "isreceiveemailafterhour": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "isReceiveEmailAfterHour",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "functionId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "function_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "functionTaskflow": {
+            "type": "String",
+            "required": false,
+            "length": 100,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "function_taskFlow",
+                "dataType": "varchar",
+                "dataLength": 100,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "employeeId": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 10,
+            "scale": 0,
+            "mysql": {
+                "columnName": "employee_id",
+                "dataType": "int",
+                "dataLength": null,
+                "dataPrecision": 10,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "realm": {
+            "type": "String",
+            "required": false,
+            "length": 512,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "realm",
+                "dataType": "varchar",
+                "dataLength": 512,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "username": {
+            "type": "String",
+            "required": true,
+            "length": 512,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "username",
+                "dataType": "varchar",
+                "dataLength": 512,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "credentials": {
+            "type": "String",
+            "required": false,
+            "length": 65535,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "credentials",
+                "dataType": "text",
+                "dataLength": 65535,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "challenges": {
+            "type": "String",
+            "required": false,
+            "length": 65535,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "challenges",
+                "dataType": "text",
+                "dataLength": 65535,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "email": {
+            "type": "String",
+            "required": true,
+            "length": 512,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "email",
+                "dataType": "varchar",
+                "dataLength": 512,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "emailverified": {
+            "type": "Number",
+            "required": false,
+            "length": null,
+            "precision": 3,
+            "scale": 0,
+            "mysql": {
+                "columnName": "emailVerified",
+                "dataType": "tinyint",
+                "dataLength": null,
+                "dataPrecision": 3,
+                "dataScale": 0,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "verificationtoken": {
+            "type": "String",
+            "required": false,
+            "length": 512,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "verificationToken",
+                "dataType": "varchar",
+                "dataLength": 512,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "status": {
+            "type": "String",
+            "required": false,
+            "length": 512,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "status",
+                "dataType": "varchar",
+                "dataLength": 512,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "created": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "created",
+                "dataType": "datetime",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        },
+        "lastupdated": {
+            "type": "Date",
+            "required": false,
+            "length": null,
+            "precision": null,
+            "scale": null,
+            "mysql": {
+                "columnName": "lastUpdated",
+                "dataType": "datetime",
+                "dataLength": null,
+                "dataPrecision": null,
+                "dataScale": null,
+                "nullable": "Y"
+            },
+            "_selectable": true
+        }
+    },
+    "validations": [],
+    "relations": {
+        "Company": {
+            "type": "belongsTo",
+            "model": "CompaniesInternal",
+            "foreignKey": "companyId"
+        },
+        "AccountCompanies": {
+          "type": "hasMany",
+          "model": "AccountCompanies",
+          "foreignKey": "accountId"
+        },
+        "Companies": {
+          "type": "hasMany",
+          "model": "CompaniesInternal",
+          "foreignKey": "companyId",
+          "through": "AccountCompanies"
+        }
+    },
+    "scope": {
+       "include": [
+         {"relation":"AccountCompanies","scope":{"where":{"isenable":1},"include":["Companies"]}},
+         {"relation":"Company"}
+       ]
+     },
+    "acls": [
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "DENY"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "create"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$owner",
+            "permission": "ALLOW",
+            "property": "deleteById"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "login"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "logout"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "findById"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "find"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "updateAttributes"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "update"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "updateAccount"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "confirm"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "ALLOW",
+            "property": "resetPassword"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW",
+            "property": "updatePassword"
+        },
+        {
+            "accessType": "EXECUTE",
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW",
+            "property": "setCompany"
+        }
+    ],
+    "methods": []
+}

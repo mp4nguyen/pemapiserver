@@ -1,0 +1,8 @@
+        "type": "SMTP",
+        "host": "smtp.gmail.com",
+        "secure": true,
+        "port": 465,
+        "auth": {
+          "user": "mp4nguyen@gmail.com",
+          "pass": "anhnguyet3005!"
+        }

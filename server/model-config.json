@@ -1,0 +1,188 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "../node_modules/loopback-ds-timestamp-mixin",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "db"
+  },
+  "AccessToken": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "ACL": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "Assessments": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "AssessmentHeaders": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "accounts": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "AccountCompanies": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "AccountTokenCompanies": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "BookingHeaders": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "BookingCandidates": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "FatherCompaniesV": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "Positions": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "Packages": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "Companies": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "CompaniesInternal": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "CompanyChildV": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "Redimedsites": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "RedimedsiteStateSuburbs": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "RedimedsiteStates": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "CalendarForCandidate2V": {
+    "dataSource": "sakila",
+    "public": false
+  },
+    "Calendar": {
+        "dataSource": "sakila",
+        "public": true
+    },
+    "CalendarV": {
+        "dataSource": "sakila",
+        "public": false
+    },
+  "CalendarForCandidateV": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "BookingCandidatesV": {
+    "dataSource": "sakila",
+    "public": false,
+    "$promise": {},
+    "$resolved": false
+  },
+  "AssessmentV": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "PackagesAssessments": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "PackagesAssessmentsV": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "PackageAssessmentHeadersV": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "PackageAssessmentsWithHeaderV": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "Email": {
+    "dataSource": "Email"
+  },
+  "SysBookingStatus": {
+    "dataSource": "sakila",
+    "public": false
+  },
+  "ClientLogs": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "AngularLog": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "BookingCandidateByApptDateV": {
+    "dataSource": "sakila",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "BookingCandidateByBookingDateV": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "CalendarHoldings": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "TelehealthBookings": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "OnlineUsers": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "SynToEMR": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "TestString": {
+    "dataSource": "sakila",
+    "public": true
+  },
+  "Calendar2": {
+      "dataSource": "sakila",
+      "public": true
+  }
+}

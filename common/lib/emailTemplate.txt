@@ -1,0 +1,43 @@
+We are pleased to confirm that your medical assessment with REDIMED has been booked.
+<br>
+<br>
+<b>Please see below for details:</b>
+<br>
+Date / Time:<b> {{appointmentTime}}  (Please arrive 15 minutes early to your appointment to complete any paperwork required) </b> 
+<br>
+Location: <b>REDiMED {{siteName}} </b>
+<br>
+Note: <b>{{comments}}</b><br><br><br>
+
+<b>Assessments:</b><br>
+{{assessments}}
+<br>
+<b>1.	What you will need to bring with you to your appointment:</b>
+<br>
+<br>
+&nbsp&nbsp&nbsp&nbsp•	Current photo ID (at least one of the items listed below):<br>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspo	drivers licence <br>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspo	passport <br>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspo	proof of age card <br>
+<br>
+*Please note:  failure to provide the above will mean we will not be able to complete the medical and you will have to reschedule.<br>
+
+<br>  
+<b>2.	Things to know prior to your appointment:</b><br>
+&nbsp&nbsp&nbsp&nbsp•	Please be 15 minutes early to your appointment to complete any paperwork required.<br>
+&nbsp&nbsp&nbsp&nbsp•	If you are required to complete a functional assessment please wear enclosed shoes such as sneakers and comfortable loose fitting clothing or clothing suitable for the gym.<br>
+&nbsp&nbsp&nbsp&nbsp•	If you have had a chest X- ray within the last 12 months please bring this with you. It may exempt you from needing a new one.<br>
+&nbsp&nbsp&nbsp&nbsp•	If you are having a hearing assessment and need to have at least 16 hours of relatively quiet time before your appointment (no prolonged loud noises and avoid anything louder than a vacuum cleaner).<br>
+
+<br>  
+<b>3.	Appointment changes and cancellations </b><br>
+&nbsp&nbsp&nbsp&nbsp•	Please be aware that should you need to re-schedule or cancel your booking please contract our team on 08 9230 0990. Please note our team require at least 24 hours’ notice to cancel or re-schedule appointments. <br>
+<br>
+
+Thank you and we look forward to welcoming you at one of our clinics. <br><br>
+
+<b>Please call REDiMED for any enquiries or to reschedule your appointment if required.</b><br><br><br>
+<img src='https://medicalbookings.redimed.com.au:8181/assets/global/img/Logo REDIMED 128px.png'/> <br>
+Address: 1 Frederick street, Belmont, 6104, WA, Australia <br>
+Phone:   (08) 9300 3835<br>
+Webite:  www.redimed.com.au

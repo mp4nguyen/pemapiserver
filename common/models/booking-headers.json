@@ -33,13 +33,13 @@
     "poNumber": {
       "type": "String",
       "required": false,
-      "length": 20,
+      "length": 100,
       "precision": null,
       "scale": null,
       "mysql": {
         "columnName": "PO_Number",
         "dataType": "varchar",
-        "dataLength": 20,
+        "dataLength": 100,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"
@@ -122,6 +122,22 @@
         "dataLength": null,
         "dataPrecision": 10,
         "dataScale": 0,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    "packageDetail": {
+      "type": "String",
+      "required": false,
+      "length": 2000,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "package_detail",
+        "dataType": "varchar",
+        "dataLength": 2000,
+        "dataPrecision": null,
+        "dataScale": null,
         "nullable": "Y"
       },
       "_selectable": true
@@ -408,7 +424,28 @@
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "submitPhoneBooking"
-    }
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "updateBooking"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "cancelBooking"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "transferEform"
+    }    
   ],
   "methods": []
 }

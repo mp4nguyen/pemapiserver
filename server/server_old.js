@@ -1,9 +1,13 @@
+// CPU Profiling
+// require('./monitoring/CpuProfiler').init('./public/metrics');
+
+// Heap Dumps and Metrics
+// require('./monitoring/HeapDump').init('./public/metrics');
+const util = require('util');
 var loopback = require('loopback');
 var boot = require('loopback-boot');
-
-
 var app = module.exports = loopback();
-
+var isMaster = false;
 ///// Phuong added this code Begin/////
 var moment = require('moment');
 var cluster = require('cluster');
@@ -14,7 +18,6 @@ var HashMap = require('hashmap');
 var userHashMap = new HashMap();//to store all user
 var companyHashMap = new HashMap();//to store all company of user
 var ipHashMap = new HashMap();
-app.companyHashMap = companyHashMap;
 //==========Start configuring for server===============
 var port = 8181,
     num_processes = require('os').cpus().length;
@@ -31,19 +34,8 @@ var fs = require('fs')
 var morgan = require('morgan')
 
 
-var logDirectory = __dirname + '/log'
-// ensure log directory exists
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
-// create a rotating write stream
-var accessLogStream = FileStreamRotator.getStream({filename: logDirectory + '/access-%DATE%.log', frequency:"daily", verbose: false, date_format: "YYYY-MM-DD"});
-
-
-// setup the logger
-app.use(morgan('combined', {stream: accessLogStream}))
-
 app.use(loopback.context());
 app.use(loopback.token());
-
 ///////Begin to connect to the monitor server ////////
 // Connect to server
 var reqId = 0;
@@ -79,9 +71,6 @@ app.use(function(req,res,next){
         companyName = currCompany.companyName;
       }
   }
-
-
-  logger.log('info',"********* 1. Send to monitor server url  " + process.pid + "  remoteAddress = " + req.connection.remoteAddress + " url = " + req.url);
   socket.emit('requestStart',{
                                 serverName: serverName,
                                 proId: process.pid,
@@ -121,56 +110,55 @@ app.use(function(req,res,next){
 });
 ///////End to connect to the monitor server ////////
 
+var logDirectory = __dirname + '/log'
+// ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+// create a rotating write stream
+var accessLogStream = FileStreamRotator.getStream({filename: logDirectory + '/access-%DATE%.log', frequency:"daily", verbose: false, date_format: "YYYY-MM-DD"});
+// setup the logger
+app.use(morgan('combined', {stream: accessLogStream}))
+
+
 //app.use(hostAuthorization);
-//app.use(logResponseBody);
+app.use(logResponseBody);
 
 app.use('/CreatePosition-ViewController-context-root*',function(req,res,next){
     console.log('request with /CreatePosition-ViewController-context-root*....');
     res.redirect('/');
 });
 
-
 app.use(function setCurrentUser(req, res, next) {
-    logger.log('info',"********* 2.1. Req at proId =  " + process.pid + " url = " + req.url + "  accessToken = " + req.accessToken);
+
     if (!req.accessToken) {
         var loopbackContext = loopback.getCurrentContext();
         loopbackContext.set('companyId', -1);
-        logger.log('info',"********* 2.2. Req without accessToken at proId =  " + process.pid + " url = " + req.url);
+        logger.log('info',"> Req at proId =  " + process.pid + " url = " + req.url);
         return next();
     }
     else{
         /// caching user and company object .If in the hash, get in the hash
-
         var currUser = userHashMap.get(req.accessToken.id);
-
         if(currUser){
-            logger.log('info',"********* 3. Req with accessToken and caching user at proId =  " + process.pid + " url = " + req.url + " currUser = ",currUser);
             //console.log(">>>>>>>Get from hash",currUser.password);
             var loopbackContext = loopback.getCurrentContext();
-            loopbackContext.set('accessToken', req.accessToken);
-            loopbackContext.set('originalCompanyId', currUser.originalCompanyId);
+            loopbackContext.set('companyId', currUser.companyId);
             loopbackContext.set('currentUser', currUser);
+            loopbackContext.set('accessToken', req.accessToken);
             var currCompany = companyHashMap.get(req.accessToken.id);
             //console.log(' ->>>>>>>>>>>>>>>>>>>>>>>>>>>currCompany = ',currCompany);
             if(currCompany){
-                currUser.companyId = currCompany.id;
-                loopbackContext.set('companyId', currCompany.id);
-                loopbackContext.set('currentUser', currUser);
                 loopbackContext.set('company', currCompany);
-                //logger.log('info',req.connection.remoteAddress + "> Req at proId =  " + process.pid + " url = " + req.url + " userId = " + req.accessToken.userId + " companyId = " + currUser.companyId + " companyName="+currCompany.companyName);
-                logger.log('info',"********* 4. Req with accessToken and caching user and caching company at proId =  " + process.pid + " url = " + req.url + " userId = " + req.accessToken.userId + " companyId = " + currUser.companyId + " companyName="+currCompany.companyName);
+                logger.log('info',"> Req at proId =  " + process.pid + " url = " + req.url + " userId = " + req.accessToken.userId + " companyId = " + currUser.companyId + " companyName="+currCompany.companyName);
                 next();
             }else{
-                loopbackContext.set('companyId', currUser.companyId);
-                app.models.Companies.findById(currUser.companyId,function(err,company){//{include:'subsidiaries'}
+                app.models.Companies.findById(currUser.companyId,{include:'subsidiaries'},function(err,company){
                     //console.log(' ->>>>>>>>>>>>>>>>>>>>>>>>>>>company = ',company);
                     if (err) {
                         return next(err);
                     }
                     companyHashMap.set(req.accessToken.id,company);
                     if(company){
-                        logger.log('info',"********* 5. Req with accessToken and caching user and query company at proId =  " + process.pid + " url = " + req.url + " userId = " + req.accessToken.userId + " companyId = " + company.id + " companyName="+company.companyName);
-                        //logger.log('info',"> Req at proId =  " + process.pid + " url = " + req.url + " userId = " + req.accessToken.userId + " companyId = " + company.id + " companyName="+company.companyName);
+                        logger.log('info',"> Req at proId =  " + process.pid + " url = " + req.url + " userId = " + req.accessToken.userId + " companyId = " + company.id + " companyName="+company.companyName);
                     }else{
                         logger.log('info',"> Req at proId =  " + process.pid + " url = " + req.url + " userId = " + req.accessToken.userId);
                     }
@@ -180,7 +168,7 @@ app.use(function setCurrentUser(req, res, next) {
             }
 
         }else{
-            logger.log('info',"********* 6. Req with accessToken and will find userat proId =  " + process.pid + " url = " + req.url + " userId = " + req.accessToken.userId);
+
             app.models.Accounts.findById(req.accessToken.userId, function(err, user) {
                 if (err) {
                     return next(err);
@@ -193,13 +181,11 @@ app.use(function setCurrentUser(req, res, next) {
                 var loopbackContext = loopback.getCurrentContext();
                 //console.log(loopbackContext);
                 if (loopbackContext) {
-                    user.originalCompanyId = user.companyId;
-                    loopbackContext.set('originalCompanyId', user.originalCompanyId);
                     loopbackContext.set('companyId', user.companyId);
                     loopbackContext.set('currentUser', user);
                     loopbackContext.set('accessToken', req.accessToken);
                 }
-                app.models.Companies.findById(user.companyId,function(err,company){//,{include:'subsidiaries'}
+                app.models.Companies.findById(user.companyId,{include:'subsidiaries'},function(err,company){
                     //console.log(' ->>>>>>>>>>>>>>>>>>>>>>>>>>>company = ',company);
                     if (err) {
                         return next(err);
@@ -266,7 +252,7 @@ function logResponseBody(req, res, next) {
 
 app.httpStart = function() {
   // start the web server
-  var server = app.listen(function() {
+  return app.listen(function() {
     app.emit('started');
     var baseUrl = app.get('url').replace(/\/$/, '');
     console.log('Web server listening at: %s', baseUrl);
@@ -275,106 +261,6 @@ app.httpStart = function() {
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
   });
-  ///socket.io
-  // Here you might use middleware, attach routes, etc.
-  var io = sio(server);
-
-  // Tell Socket.IO to use the redis adapter. By default, the redis
-  // server is assumed to be on localhost:6379. You don't have to
-  // specify them explicitly unless you want to change them.
-  io.adapter(sio_redis({ host: 'localhost', port: 6379 }));
-
-  // Listen to messages sent from the master. Ignore everything else.
-  process.on('message', function(message, connection) {
-      ipAddress = connection.remoteAddress;
-      workerIndex = message.substr(message.indexOf('indexWorker=')+12);
-      console.log(' ----> ',message,'ipAddress=',ipAddress,' workerIndex=',workerIndex);
-      if (message.indexOf('sticky-session:connection')==-1) {
-          return;
-      }
-
-      // Emulate a connection event on the server by emitting the
-      // event with the connection the master sent us.
-      server.emit('connection', connection);
-      connection.resume();
-  });
-  io.on('connection', function(socket) {
-      // Use socket to communicate with this particular client only, sending it it's own id
-      console.log("User connected to the server socket.id = ",socket.id,' ipAddress =',ipAddress,' workerIndex = ',workerIndex);
-
-      var socketObject = {
-        id: 0,
-        socketId: socket.id,
-        userName: "",
-        companyId: null,
-        companyName: null,
-        pid: process.pid,
-        ip: ipAddress,
-        worker:  workerIndex,
-        onlineAt: moment().format('YYYY-MM-DD HH:mm:ss')
-      };
-
-      //console.log("will insert socketId into DB",socketObject);
-      app.models.OnlineUsers.create(socketObject,function(err,data){
-        //console.log("Inserted the socketId into DB",err,data);
-        sendOnlineUserDataToAdmin();
-      });
-
-      socket.emit('welcome', { message: 'Welcome!', id: socket.id });
-      socket.on('login', function(data) {
-          console.log('login',process.pid , data);
-          app.models.OnlineUsers.update({socketId: socket.id},{
-                                                                userId: data.userId,
-                                                                userName: data.userName,
-                                                                companyId: data.companyId,
-                                                                companyName: data.companyName,
-                                                                worker:  workerIndex,
-                                                                loginAt: moment().format('YYYY-MM-DD HH:mm:ss')
-                                                              },function(err,data){
-            //console.log("Inserted the socketId into DB",err,data);
-            sendOnlineUserDataToAdmin();
-          });
-      });
-
-      socket.on('logout', function(){
-          console.log('user logout socket.id = ',socket.id );
-          app.models.OnlineUsers.update({socketId: socket.id},{logoutAt: moment().format('YYYY-MM-DD HH:mm:ss') },function(err,data){
-            console.log("Updated the socketId into DB",err,data);
-            sendOnlineUserDataToAdmin();
-          });
-      });
-
-      socket.on('HoldAppt',function(newValue){
-        console.log('---> client occupied the new appt = ',newValue, ' oldValue = ' );
-        //app.models.Companies.setHoldings(newValue,oldValue);
-        //socket.broadcast.emit('UpdateCalendar',data);
-      });
-
-      socket.on('OccupyAppt',function(newValue,oldValue){
-        console.log('---> client occupied the appt = ',newValue,' oldValue =',oldValue);
-        //socket.broadcast.emit('UpdateCalendar',data);
-      });
-
-      socket.on('GetOnlineUsers',function(){
-        console.log('GetOnlineUsers request');
-        sendOnlineUserDataToAdmin();
-      });
-      socket.on('disconnect', function(){
-          console.log('user disconnected socket.id = ',socket.id );
-          app.models.OnlineUsers.update({socketId: socket.id},{offlineAt: moment().format('YYYY-MM-DD HH:mm:ss') },function(err,data){
-            console.log("Updated the socketId into DB",err,data);
-            sendOnlineUserDataToAdmin();
-          });
-      });
-      var sendOnlineUserDataToAdmin = function(){
-          app.models.OnlineUsers.find({order:'onlineAt DESC',limit: 100},function(err,data){
-            console.log("List socketId from DB",err);
-            io.emit('OnlineUsersData',data);
-          });
-
-      };
-  });
-  return server;
 };
 
 
@@ -387,7 +273,7 @@ var express = require('express'),
 app.httpsStart = function() {
     // start the web server
     var ssl_options = {
-        pfx: fs.readFileSync('key/wildcard_redimed_com_au.pfx'),
+        pfx: fs.readFileSync('key/star_redimed_com_au.pfx'),
         passphrase: '1234'
     }; //**SSL file and passphrase use for server
     var ipAddress = "";
@@ -428,10 +314,6 @@ app.httpsStart = function() {
         server.emit('connection', connection);
         connection.resume();
     });
-
-    //clear all holdings when startup the server
-    app.models.Companies.clearAllHoldingsWhenStartup();
-
     io.on('connection', function(socket) {
         // Use socket to communicate with this particular client only, sending it it's own id
         console.log("User connected to the server socket.id = ",socket.id,' ipAddress =',ipAddress,' workerIndex = ',workerIndex);
@@ -472,37 +354,28 @@ app.httpsStart = function() {
         socket.on('logout', function(){
             console.log('user logout socket.id = ',socket.id );
             app.models.OnlineUsers.update({socketId: socket.id},{logoutAt: moment().format('YYYY-MM-DD HH:mm:ss') },function(err,data){
-              console.log("Updated the socketId into DB",err,data);
+              //console.log("Updated the socketId into DB",err,data);
               sendOnlineUserDataToAdmin();
             });
         });
-
-        socket.on('OccupyAppt',function(newValue,oldValue,candidateTempId){
-          //console.log('---> client occupied the newValue = ',newValue,'  oldValue = ',oldValue);
-          socket.broadcast.emit('UpdateCalendar',newValue,oldValue);
-          app.models.Companies.setHoldings(socket.id,newValue,oldValue,()=>{
-
-          },candidateTempId);
+        socket.on('OccupyAppt',function(data){
+          //console.log('client occupied the appt = ',data);
+          socket.broadcast.emit('UpdateCalendar',data);
         });
-
         socket.on('GetOnlineUsers',function(){
-          console.log('GetOnlineUsers request');
+          //console.log('GetOnlineUsers request');
           sendOnlineUserDataToAdmin();
         });
         socket.on('disconnect', function(){
             console.log('user disconnected socket.id = ',socket.id );
-            ///clear all holdings of the disconnected clients
-            app.models.Companies.clearHoldings(socket.id,()=>{
-                socket.broadcast.emit('UpdateCalendar');
-            });
             app.models.OnlineUsers.update({socketId: socket.id},{offlineAt: moment().format('YYYY-MM-DD HH:mm:ss') },function(err,data){
-              console.log("Updated the socketId into DB",err,data);
+              //console.log("Updated the socketId into DB",err,data);
               sendOnlineUserDataToAdmin();
             });
         });
         var sendOnlineUserDataToAdmin = function(){
             app.models.OnlineUsers.find({order:'onlineAt DESC',limit: 100},function(err,data){
-              console.log("List socketId from DB",err);
+              //console.log("List socketId from DB",err);
               io.emit('OnlineUsersData',data);
             });
 
@@ -518,14 +391,13 @@ if (cluster.isMaster) {
     // for example.
     var workers = [];
     var currentWorker = 0;
-    var pingWorkerIndex = 0;
     // Helper function for spawning worker at index 'i'.
     var spawn = function(i) {
         workers[i] = cluster.fork();
 
         // Optional: Restart worker on exit
         workers[i].on('exit', function(worker, code, signal) {
-            console.log('respawning worker', i);
+            console.log(' ********************* respawning worker '+ i + ' ********************* ');
             spawn(i);
         });
     };
@@ -565,13 +437,7 @@ if (cluster.isMaster) {
         // We received a connection and need to pass it to the appropriate
         // worker. Get the worker for this connection's source IP and pass
         // it the connection.
-        //var indexW = worker_index(connection.remoteAddress, num_processes);
-        //console.log('display hasmap');
-        /*for(var i in ipHashMap) {
-            if (ipHashMap.hasOwnProperty(i)) {
-                console.log('Key is: ',i,'. Value is: ',ipHashMap[i]);
-            }
-        }*/
+
         var indexW = ipHashMap.get(ipAddress);
         //console.log('connection.remoteAddress = ',ipAddress,'indexW = ',indexW);
         if(indexW == undefined){
@@ -584,24 +450,10 @@ if (cluster.isMaster) {
             currentWorker = 0;
           }
         }
+        //console.log("\n\nconnection coming.....",ipAddress,connection.address() );
 
-        console.log("======================> connection coming.....",ipAddress,' worker_index = ',indexW);
-        //var worker = workers[indexW];
-        //worker.send('sticky-session:connection indexWorker=' + indexW, connection);
-
-        if(ipAddress == '::ffff:192.168.40.11'){
-            console.log("******************************************************Yes it is index = ",pingWorkerIndex)
-            workers[pingWorkerIndex].send('sticky-session:connection indexWorker=' + indexW, connection);
-            if(workers.length - 1 == pingWorkerIndex){
-              pingWorkerIndex =0;
-            }else{
-              pingWorkerIndex++;
-            }
-        }else{
-          var worker = workers[indexW];
-          worker.send('sticky-session:connection indexWorker=' + indexW, connection);
-        }
-
+        var worker = workers[indexW];
+        worker.send('sticky-session:connection indexWorker=' + indexW, connection);
 
     }).listen(port,function(){
         console.log("Master process is running............... at port " + port);

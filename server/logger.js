@@ -53,6 +53,31 @@ var info = new winston.Logger({
     ]
 });
 
+var makeBooking = new winston.Logger({
+    levels: {
+        info: 1
+    },
+    transports: [
+        new winston.transports.File({
+            level:"info",
+            filename: logDirectory + '/makeBooking-logs.log',
+            handleExceptions: true,
+            json: true,
+            maxsize: 5242880, //5MB
+            maxFiles: 100,
+            colorize: false,
+            timestamp:function() { return dateFormat((new Date()), "dd/mm/yyyy, hh:MM:ss");}
+        }),
+        new winston.transports.Console({
+            level:"info",
+            handleExceptions: true,
+            json: false,
+            colorize: true,
+            timestamp:function() { return dateFormat((new Date()), "dd/mm/yyyy, hh:MM:ss");}
+        })
+    ]
+});
+
 var warn = new winston.Logger({
     levels: {
         warn: 2
@@ -116,6 +141,9 @@ var exports = {
     error: function(msg){
         error.error(msg);
     },
+    makeBooking: function(msg){
+        makeBooking.info(msg);
+    },    
     log: function(level,msg){
         var lvl = exports[level];
         lvl(msg);

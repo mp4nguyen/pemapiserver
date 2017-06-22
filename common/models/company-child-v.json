@@ -219,6 +219,22 @@
       },
       "_selectable": true
     },
+    "projectIdentification": {
+      "type": "String",
+      "required": false,
+      "length": 100,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "project_identification",
+        "dataType": "varchar",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "isproject": {
       "type": "Number",
       "required": false,

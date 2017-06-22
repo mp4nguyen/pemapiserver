@@ -123,6 +123,22 @@
       },
       "_selectable": true
     },
+    "defaultNote": {
+      "type": "String",
+      "required": false,
+      "length": 250,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "default_note",
+        "dataType": "varchar",
+        "dataLength": 250,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
     "latitude": {
       "type": "Number",
       "required": false,
@@ -213,6 +229,22 @@
         "columnName": "PO_number",
         "dataType": "varchar",
         "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "_selectable": true
+    },
+    "projectIdentification": {
+      "type": "String",
+      "required": false,
+      "length": 100,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "project_identification",
+        "dataType": "varchar",
+        "dataLength": 100,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"

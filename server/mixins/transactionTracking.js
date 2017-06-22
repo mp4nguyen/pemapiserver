@@ -25,11 +25,19 @@ module.exports = function(Model, options) {
                 //console.log("tracsactionTracking.js Model.observe before save Update record");
                 ctx.data.lastUpdatedBy =  user.id;
                 ctx.data.lastUpdateDate = currentDateTime;
-            }            
+            }
+        }else{
+            if (ctx.instance) {
+                //console.log("tracsactionTracking.js Model.observe before save New record");
+                ctx.instance.creationDate = currentDateTime;
+                ctx.instance.lastUpdateDate = currentDateTime;
+            } else {
+                //console.log("tracsactionTracking.js Model.observe before save Update record");s
+                ctx.data.lastUpdateDate = currentDateTime;
+            }
         }
 
         next();
     });
 
 };
-

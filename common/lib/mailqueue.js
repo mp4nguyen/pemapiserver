@@ -82,7 +82,7 @@ var sendEmailFunc = function(job,done,candidateId,emailType,currentUser,currentC
             //console.log(">>>>>>>>sendConfirmationEmail",err,headerData[0]);
             app.models.Redimedsites.find({where:{id:data[0].siteId}},function(err,siteData){
 
-                app.models.Packages.find({where:{id:headerData[0].packageId}},function(err,packData){
+                app.models.Packages.find({where:{id:headerData[0].packageId}, include: {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]}} },function(err,packData){
                     var packageView = "";
                     var assReportTo = [];
                     var package = JSON.parse(JSON.stringify(packData[0]));

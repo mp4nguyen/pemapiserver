@@ -100,7 +100,7 @@
   },
     "Calendar": {
         "dataSource": "sakila",
-        "public": true
+        "public": false
     },
     "CalendarV": {
         "dataSource": "sakila",
@@ -179,10 +179,30 @@
   },
   "TestString": {
     "dataSource": "sakila",
-    "public": true
+    "public": false
   },
   "Calendar2": {
       "dataSource": "sakila",
+      "public": false
+  },
+  "Calendar2V": {
+      "dataSource": "sakila",
       "public": true
+  },
+  "Calendar2ResourcesV": {
+      "dataSource": "sakila",
+      "public": false
+  },
+  "Calendar2EventsV": {
+      "dataSource": "sakila",
+      "public": false
+  },
+  "BookingCandidateSlots": {
+      "dataSource": "sakila",
+      "public": false
+  },
+  "CalendarHoldingDetails": {
+      "dataSource": "sakila",
+      "public": false
   }
 }

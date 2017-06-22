@@ -9,6 +9,10 @@
        primaryKey: true,
        autoIncrement: true
      },
+     serverName: {
+       type: DataTypes.STRING,
+       field: 'serverName'
+     },
      pid: {
        type: DataTypes.INTEGER,
        field: 'pid'
@@ -17,6 +21,10 @@
        type: DataTypes.INTEGER,
        field: 'reqId'
      },
+     isKill: {
+       type: DataTypes.INTEGER,
+       field: 'isKill'
+     },
      ip: {
        type: DataTypes.STRING,
        field: 'ip'
@@ -24,6 +32,10 @@
      url: {
        type: DataTypes.STRING,
        field: 'url'
+     },
+     reqBody: {
+       type: DataTypes.STRING(5000),
+       field: 'reqBody'
      },
      startTime: {
        type: DataTypes.BIGINT,

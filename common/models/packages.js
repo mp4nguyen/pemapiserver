@@ -141,21 +141,21 @@ module.exports = function(Packages) {
     });
 
 
-    Packages.on('attached', function(obj){
-        var find = Packages.find;
-        Packages.find = function(filter, cb) {
-            if(arguments[0]){
-                arguments[0].include = {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]}};
-            }else{
-                arguments[0] = {};
-                arguments[0].include = {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]}};
-            }
-
-            //console.log(">>>>><<<<<< Packages.find arg=",arguments[0],"  ",arguments[1]);
-            //find({"where": {"id": 9},"include": {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]  ,"scope": {"include": ["assessmentHeaders"]}  }}},cb);
-//{"where": {"id": 9},"include": {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]  ,"scope": {"include": ["assessmentHeaders"]}  }}}
-            return find.apply(this, arguments);
-        };
-    });
+//     Packages.on('attached', function(obj){
+//         var find = Packages.find;
+//         Packages.find = function(filter, cb) {
+//             if(arguments[0]){
+//                 arguments[0].include = {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]}};
+//             }else{
+//                 arguments[0] = {};
+//                 arguments[0].include = {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]}};
+//             }
+//
+//             //console.log(">>>>><<<<<< Packages.find arg=",arguments[0],"  ",arguments[1]);
+//             //find({"where": {"id": 9},"include": {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]  ,"scope": {"include": ["assessmentHeaders"]}  }}},cb);
+// //{"where": {"id": 9},"include": {"relation": "AssessmentHeaders","scope": {"include": ["Assessments"]  ,"scope": {"include": ["assessmentHeaders"]}  }}}
+//             return find.apply(this, arguments);
+//         };
+//     });
 
 };

@@ -48,7 +48,7 @@
       "mysql": {
         "columnName": "PO_Number",
         "dataType": "varchar",
-        "dataLength": 50,
+        "dataLength": 100,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"
@@ -547,7 +547,7 @@
         "nullable": "Y"
       },
       "_selectable": true
-    }    
+    }
   },
   "validations": [],
   "relations": {},

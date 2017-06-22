@@ -124,6 +124,7 @@ setInterval(function(){
                 ' <= resid = ' + key2 +
                 ' count = ' + diedWorker.count +
                 ' url = ' + value2.url +
+                ' body = ' + value2.reqBody +
                 ' userName = ' + value2.userName +
                 ' companyName = ' + value2.companyName;
 
@@ -132,7 +133,7 @@ setInterval(function(){
                 logger.error(outputDiedWorker);
                 logger.info(outputDiedWorker);
                 screen.render();
-                if(diedWorker.count > 5){
+                if(diedWorker.count > 7){
 
                     if(isRunning(key) && !diedWorker.isKill){
                       //console.log(('Sending an email and kill pid = ' + key).red);
@@ -188,13 +189,6 @@ setInterval(function(){
     data.push(['----',''+key+' = '+value.lastId,'----'])
     value.ips.forEach(function(value2,key2){
       data.push([''+key,''+key2,''+value2.requestCount])
-      //value.logToScreen.log('    - IP = ' + key2 + ' requestCount = ' + value2.requestCount);
-      //console.log('    - IP = ',key2,' requestCount = ',value2.requestCount);
-        /*
-        value2.requests.forEach(function(value3,key3){
-          console.log('         + url = ',value3.url);
-        },value2.requests);
-        */
     },value.ips);
   },workers);
   ipsTable.setData({headers: ['PID', 'IP', 'No Reqs'], data: data})
@@ -303,18 +297,6 @@ io.sockets.on('connection', function(socket)
     //console.log('ip: ',msg.ip,' proId : ',msg.proId,' reqId: ',msg.requestId,' duration: ',msg.duration,' url: ',msg.url,'');
   });
 
-/*
-  socket.on('webAskForInitialData',()=>{
-      //react connect to the monitor server and ask for the initial data
-      //server will emit the whole data to the web
-      console.log('Receve message from web.....ss');
-      var workersArray = [];
-      workers.forEach((worker,key)=>{
-        workersArray.push(worker);
-      },workers);
-      socket.emit('initialDataForWeb',workersArray);
-  });
-*/
   // Disconnect listener
   socket.on('disconnect', function() {
     //console.log('Client disconnected.');

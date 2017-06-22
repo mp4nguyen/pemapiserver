@@ -1,18 +1,12 @@
 // Load requirements
 var http = require('http'),
-io = require('socket.io'),
-reqMap = new Map();
-var clientInforMap = new Map();
-var diedWorkerMap = new Map();
-var workers = new Map();
-var workersData = [];//used to display the workers on the screen.
-var justKilledPid = -1;//use to store the pid that is kill , so we can disable the display and add the pid to the new pid
-var justKilledLastId = -1;
+io = require('socket.io');
+var webSocketClients = [];
+var webSocketIDClients = [];
 var colors = require('colors');
 var email = require('emailjs');
 var isRunning = require('is-running');
 var logger = require('./monitorlogger');
-
 var models = require('./monitor_models');
 var requests = new Map();
 var mailServer = email.server.connect({
@@ -34,6 +28,7 @@ var server = http.createServer(function(req, res)
 server.listen(6500,function(){
   //console.log('Monitor server is running...');
 });
+
 io = io.listen(server);
 
 // Add a connect listener
@@ -54,14 +49,15 @@ io.sockets.on('connection', function(socket)
         ||msg.url.indexOf('.ico')>0
         ||msg.url.indexOf('.woff')>0
       ){
-      //console.log(' remove',msg.url);
     }else{
-      //console.log(' keep',msg.url);
-      requests.set(msg.proId+':'+msg.requestId,{
+      var reqObject = {
         pid: msg.proId,
+        serverName: msg.serverName,
         reqId: msg.requestId,
+        isKill: 0,
         ip: msg.ip,
         url: msg.url,
+        reqBody: msg.reqBody,
         startTime: msg.startTime,
         endTime: null,
         duration: null,
@@ -70,6 +66,12 @@ io.sockets.on('connection', function(socket)
         companyId: msg.companyId,
         companyName: msg.companyName,
         count: 0
+      };
+
+      requests.set(msg.proId+':'+msg.requestId,reqObject);
+      //console.log('------> Will send data to web client',reqObject);
+      webSocketClients.forEach(socket=>{
+          socket.emit('sendReqBeginToWeb',reqObject);
       });
     }
 
@@ -77,30 +79,36 @@ io.sockets.on('connection', function(socket)
   });
 
   socket.on('requestEnd',function(msg){
-
     var req = requests.get(msg.proId+':'+msg.requestId);
     if(req){
       console.log('ip: ',msg.ip,' proId : ',msg.proId,' reqId: ',msg.requestId,'msg.endTime:',msg.endTime,' duration: ',msg.duration,' url: ',msg.url,'');
-
       req.endTime = msg.endTime;
       req.duration = msg.duration;
+      //console.log('end req....');
+
+      webSocketClients.forEach(socket=>{
+          socket.emit('sendReqEndToWeb',{pid:msg.proId,reqId:msg.requestId,endTime:msg.endTime,duration: msg.duration});
+      });
     }
-
-    //logAll.log('ip: ' + msg.ip + ' pid: ' + msg.proId + ' id: ' + msg.requestId + ' time: ' + msg.duration + ' url: ' + msg.url);
-
-        ///models.Monitor.update({endTime:msg.endTime,duration:msg.duration},{where:{pid:msg.proId,reqId:msg.requestId}});
   });
 
 
   socket.on('webAskForInitialData',()=>{
       //react connect to the monitor server and ask for the initial data
       //server will emit the whole data to the web
-      console.log('Receve message from web.....ss');
+      console.log('Receve message from web.....');
+      webSocketClients.push(socket);
+      webSocketIDClients.push(socket.id);
       var workersArray = [];
-      workers.forEach((worker,key)=>{
-        workersArray.push(worker);
-      },workers);
-      socket.emit('initialDataForWeb',workers);
+      models.Monitor.findAll().then((data)=>{
+          console.log('======> data length in DB = ',data.length);
+          workersArray = data;
+          console.log(' more data from memory ' ,requests.size);
+          requests.forEach((worker,key)=>{
+            workersArray.push(worker);
+          },requests);
+          socket.emit('initialDataForWeb',workersArray);
+      });
   });
 
   // Disconnect listener
@@ -118,9 +126,12 @@ setInterval(()=>{
     if(request.duration && request.count == 0){
       bulkInsert.push({
         pid: request.pid,
+        serverName: request.serverName,
         reqId: request.reqId,
+        isKill: request.isKill,
         ip: request.ip,
         url: request.url,
+        reqBody: request.reqBody.substring(0,4990),
         startTime: request.startTime,
         endTime: request.endTime,
         duration: request.duration,
@@ -130,22 +141,25 @@ setInterval(()=>{
         companyName: request.companyName,
         count: request.count
       });
+
       //request.delete(key);
-    }else if(request.duration && request.count > 0){
+    }else if( (request.duration && request.count > 0) || request.isKill == 1){
       console.log('will update monitor table ',request);
-      models.Monitor.update({endTime:request.endTime,duration:request.duration,count:request.count},
+      models.Monitor.update({endTime:request.endTime,duration:request.duration,count:request.count,isKill:request.isKill},
                             {where:{pid:request.pid,reqId:request.reqId}}).then(function(v){
-                                console.log('---> delete  result = ',key);
+                                //console.log('---> delete  result = ',key);
                                 requests.delete(key);
                             });
-
     }
     else if(!request.duration && request.count==0){
       bulkInsert.push({
         pid: request.pid,
+        serverName: request.serverName,
         reqId: request.reqId,
+        isKill: request.isKill,
         ip: request.ip,
         url: request.url,
+        reqBody: request.reqBody.substring(0,4990),
         startTime: request.startTime,
         endTime: request.endTime,
         duration: request.duration,
@@ -155,12 +169,11 @@ setInterval(()=>{
         companyName: request.companyName,
         count: request.count
       });
-      request.count++;
-    }else{
-      request.count++;
-      //models.Monitor.update(
-        //{endTime:request.endTime,duration:request.duration,count:request.count},
-        //{where:{pid:request.proId,reqId:request.requestId}});
+    }else if(!request.duration && request.count > 0){
+      models.Monitor.update({count:request.count},
+                            {where:{pid:request.pid,reqId:request.reqId}}).then(function(v){
+                                //console.log('---> delete  result = ',key);
+                            });
     }
   },requests);
 
@@ -174,4 +187,48 @@ setInterval(()=>{
     });
   });
 
-},1000);
+},10000);
+
+setInterval(function(){
+  requests.forEach(function(request,key){
+      if(!request.duration){
+          if(!request.isKill){
+              request.count++;
+              var outputDiedWorker = 'pid=' + request.pid +
+              ' ip=' + request.ip +
+              ' count = ' + request.count +
+              ' url = ' + request.url +
+              ' body = ' + request.reqBody +
+              ' userName = ' + request.userName +
+              ' companyName = ' + request.companyName;
+              console.log('===>late req = ',outputDiedWorker);
+              if(request.count > 5 && isRunning(request.pid) && request.isKill == 0){
+                    //io.emit('sendReqUpdateToWeb',{pid:msg.proId,reqId:msg.requestId,count:request.count,isKill: 1});
+                    //console.log(('Sending an email and kill pid = ' + key).red);
+                    webSocketClients.forEach(socket=>{
+                        console.log('will emit killing request to ',socket.id);
+                        socket.emit('sendReqUpdateToWeb',{pid:request.pid,reqId:request.reqId,count:request.count,isKill:1});
+                    });
+                    logger.error('Sending an email and kill pid = ' + key);
+                    logger.info('Sending an email and kill pid = ' + key);
+                    request.isKill = 1;
+                    mailServer.send({
+                      text: outputDiedWorker,
+                      from: 'NodeJS',
+                      to: 'phuong_thql@yahoo.com',
+                      cc: '',
+                      subject: 'processid: ' + key + ' has died'
+                    }, function (err, message) {
+                      //value.diedRequestLogToScreen.log(err || message);
+                    });
+                    //process.kill(request.pid)
+              }else{
+                  webSocketClients.forEach(socket=>{
+                      console.log('will emit too long request to ',socket.id);
+                      socket.emit('sendReqUpdateToWeb',{pid:request.pid,reqId:request.reqId,count:request.count});
+                  });
+              }
+          }
+      }
+  },requests);
+},500);
